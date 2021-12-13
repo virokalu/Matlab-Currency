@@ -1,4 +1,4 @@
-function varargout = Note(varargin)
+ function varargout = Note(varargin)
 %NOTE M-file for Note.fig
 %      NOTE, by itself, creates a new NOTE or raises the existing
 %      singleton*.
@@ -64,12 +64,14 @@ guidata(hObject, handles);
 [imname,impath]=uigetfile({'*.jpg;*.png'});
 note=imread([impath,'/',imname]);
 
-bw_note = rgb2gray(note); %making the image b and w
 
-c_count = imcrop(bw_note,[43 115 36 230]);
+
+c_count = imcrop(note,[43 115 36 230]);
 %figure , imshow(c_count);
 
-I=c_count;
+bw_note = rgb2gray(c_count); %making the image b and w
+
+I=bw_note;
 flg=ndims(I);             %imgenin renk uzayý test ediliyor. ( Testing the color space)
 
 if flg==3
@@ -90,13 +92,16 @@ d2 = imfill(I2, 'holes');  % pupil bölgesi alan tespiti
 %figure, imshow(d2);        %
 
 cc = bwconncomp(d2, 4);
-cc.NumObjects
+cc.NumObjects;
 
 axes(handles.axes3);
 imshow(note);           %Show thw note scanned
 
 axes(handles.axes2);
 imshow(d2);           %Show how we detect value
+
+axes(handles.axes4);
+imshow(c_count);           %Show how we detect value
 
 %detect the value of the note
 v=notedetect(cc.NumObjects);
@@ -106,108 +111,87 @@ set(handles.edit2,'String',v); %display it
 % Fake detection @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-%im=imresize(im,[777 1612]);
-im1 = imcrop(note,[1000 27 300 85]);
-figure,imshow(im1);
-im1=rgb2gray(im1);
-%figure,imshow(im1);
-%title('grayscale iamge');
-im1=im2bw(im1);
-figure,imshow(im1);
-title('binary iamge');
-im1 = ~im1;
-g=strel('disk',5);
-im1 = imclose(im1,g);
-figure,imshow(im1);
-title('after');
-m=ocr(im1);
-val = str2num(m.Text);
-set(handles.edit1,'String',val);
 
 
+% Fake detection @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-axes(handles.axes1);
-imshow(im);
-
-% illigibility
-if (val == 100)
+if (v == 100)
 A=imread('100.jpg'); 
 
-im=imresize(im,[size(A,1) size(A,2)] );
+note=imresize(note,[size(A,1) size(A,2)] );
 
 a = rgb2gray(A);
-p = rgb2gray(im);
+
+%figure,imshow(p);
 
 
-%[I2, rect] = imcrop(a);
-a2_tr = imcrop(a,[ 40 450 280 350]);  % butterfly
-b2_tr = imcrop(p,[40 400 280 350]);  
-figure,imshow(a2_tr);
-figure,imshow(b2_tr);
-
-a2_str = imcrop(a,[1350 30 300 120]);   % lion
-p2_str = imcrop(p,[1350 30 300 120]);   
-figure,imshow(a2_str);
 
 
+a2_str = imcrop(a,[1000 30 300 80]);   % lion
+p = imcrop(note,[1000 30 300 80]);   
+%figure,imshow(p2_str);
+
+p2_str = rgb2gray(p);
 
 %decompose into hsv
 
 hsvA = rgb2hsv(A);
-hsvp = rgb2hsv(im);
+hsvp = rgb2hsv(note);
 
 
-figure('Name','real image hsv');
-imshow([hsvImageReal(:,:,1) hsvImageReal(:,:,2) hsvImageReal(:,:,3)]);
-title('Real');
-figure('Name','fake image hsv');
-imshow([hsvImageFake(:,:,1) hsvImageFake(:,:,2) hsvImageFake(:,:,3)]);
-title('Fake');
+%figure('Name','real image hsv');
+%imshow([hsvImageReal(:,:,1) hsvImageReal(:,:,2) hsvImageReal(:,:,3)]);
+%title('Real');
+%figure('Name','fake image hsv');
+%imshow([hsvImageFake(:,:,1) hsvImageFake(:,:,2) hsvImageFake(:,:,3)]);
+%title('Fake');
 
-crophsvA = imcrop(hsvA,[1350 30 300 120]);%crop A
-crophsvp = imcrop(hsvp,[1350 30 300 120]);%crop p
+crophsvA = imcrop(hsvA,[1000 30 300 80]);%crop A
+crophsvp = imcrop(hsvp,[1000 30 300 80]);%crop p
+
+axes(handles.axes1);
+imshow(p);
 
 satThresh = 0.3;
 valThresh = 0.9;
 BWA = (crophsvA(:,:,2) > satThresh & crophsvA(:,:,3) < valThresh);
-figure('Name','lion');
-subplot(1,2,1);
-imshow(BWA);
-title('Real');
+%figure('Name','lion');
+%subplot(1,2,1);
+%imshow(BWA);
+%title('Real');
 BWp = (crophsvp(:,:,2) > satThresh & crophsvp(:,:,3) < valThresh);
-figure('Name','lion');
-subplot(1,2,2);
-imshow(BWp);
-title('fake');
+%figure('Name','lion');
+%subplot(1,2,2);
+%imshow(BWp);
+%title('fake');
 
 %close
 
-se = strel('disk',2);
+se = strel('disk',1);
 BWAclose = imclose(BWA,se);
 BWpclose = imclose(BWp,se);
-figure('Name','closed lion');
-subplot(1,2,1);
-imshow(BWAclose);
-title('cReal');
-subplot(1,2,2);
-imshow(BWpclose);
-title('cFake');
+%figure('Name','closed lion');
+%subplot(1,2,1);
+%imshow(BWAclose);
+%title('cReal');
+%subplot(1,2,2);
+%imshow(BWpclose);
+%title('cFake');
 
 BWAclose = ~BWAclose;
 BWpclose = ~BWpclose;
 
-%figure('Name','cleaned lion ');
+%clean 
 areaopenA = bwareaopen(BWAclose, 15);
 
 
 areaopenp = bwareaopen(BWpclose, 15);
-axes(handles.axes2);
-imshow(areaopenA);
+
 title('Real');
-axes(handles.axes4);
+axes(handles.axes5);
 imshow(areaopenp);
 title('Selected');
-axes(handles.axes2);
+
 
 
 %[~,countA] = bwarea(areaopenA);
@@ -221,10 +205,10 @@ areaA = bwarea(areaopenA);
 areap = bwarea(areaopenp);
 
 %areaA = regionprops(conA,'basic')
-disp(areaA);
+%disp(areaA);
 
 %areap = regionprops(conp,'basic')
-disp(areap);
+%disp(areap);
 
 co=corr2 (a2_str, p2_str); 
 
@@ -232,23 +216,21 @@ co=corr2 (a2_str, p2_str);
 %disp(['The total number of black lines for the fake note is: ' num2str(countp)]);
 
 if (co>=0.5 && areaA > 0 && areap > 0.7*areaA  )
-    disp ('correlevance of lion >0.7');
+    %disp ('correlevance of lion >0.7');
     if (areaA > 0 && areap > 0.7*areaA )
-        disp ('currency is legitimate');
-        set(handles.edit2,'String','currency is legitimate');
+       % disp ('currency is legitimate');
+        set(handles.edit1,'String','Real');
     else
-        disp ('currency is fake');
-        set(handles.edit2,'String','currency is fake');
+       % disp ('currency is fake');
+        set(handles.edit1,'String','Fake');
     end;
 else
-    disp ('correlevance of lion < 0.7');
+    %disp ('correlevance of lion < 0.7');
     disp ('currency is fake');
-    set(handles.edit2,'String','currency is fake');
+    set(handles.edit1,'String','currency is fake');
     
 end;
-end
-
-
+end 
 
 
 

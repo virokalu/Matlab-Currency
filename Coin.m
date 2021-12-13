@@ -85,8 +85,8 @@ a1=(Label==1);
 
 
 D1 = bwdist(~a1);           % computing minimal euclidean distance to non-white pixel       % 
-[xc1 yc1 r1]=merkz(D1);h
-f1=coindetect(r1)
+[xc1 yc1 r1]=merkz(D1);
+f1=coindetect(r1);
 
 axes(handles.axes1);
 imshow(I);           %Show thw coin scanned
