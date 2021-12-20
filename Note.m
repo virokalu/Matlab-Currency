@@ -59,10 +59,12 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes Note wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+
 [imname,impath]=uigetfile({'*.jpg;*.png'});
 note=imread([impath,'/',imname]);
+
+
+% Destect the value of the note @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 
@@ -72,30 +74,25 @@ c_count = imcrop(note,[43 115 36 230]);
 bw_note = rgb2gray(c_count); %making the image b and w
 
 I=bw_note;
-flg=ndims(I);             %imgenin renk uzayý test ediliyor. ( Testing the color space)
 
-if flg==3
-    I=rgb2gray(I);
-end
-
-[h,w]=size(I);
 %figure;imshow(I);
 
-c = edge(I, 'canny',0.3);  % mcanny kenar algýlama fonksiyonu (Mcanny edge detection)
-%figure; imshow(c);         % ikili imge olarak kenar tespiti (binary edges)
+c = edge(I, 'canny',0.3);  % detecting the edges of the circles
+%figure; imshow(c); 
 
-se = strel('disk',2);      %
-I2 = imdilate(c,se);       % pupil bölgesinin tespiti aþamasý 
-%imshow(I2);                %
 
-d2 = imfill(I2, 'holes');  % pupil bölgesi alan tespiti
-%figure, imshow(d2);        %
+se = strel('disk',4);      % Complete the circumference of the circle
+I2 = imdilate(c,se); 
 
-cc = bwconncomp(d2, 4);
-cc.NumObjects;
+d2 = imfill(I2, 'holes');  % fill the detected circles in the crooped image
+%figure, imshow(d2); 
+
+
+cc = bwconncomp(d2, 4);      %Find connected components in binary image to get the Number of Objects
+cc.NumObjects               %Get the Number of Objects
 
 axes(handles.axes3);
-imshow(note);           %Show thw note scanned
+imshow(note);           %Show the note scanned
 
 axes(handles.axes2);
 imshow(d2);           %Show how we detect value
@@ -104,7 +101,8 @@ axes(handles.axes4);
 imshow(c_count);           %Show how we detect value
 
 %detect the value of the note
-v=notedetect(cc.NumObjects);
+v=notedetect(cc.NumObjects);    % call function to detect the value of the note
+
 set(handles.edit2,'String',v); %display it
 
 
@@ -113,12 +111,11 @@ set(handles.edit2,'String',v); %display it
 
 
 
-% Fake detection @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+if (v == 100)           % fake detection for the 100 ruppee note
+    
+A=imread('100.jpg');  %input the real note image we have to the system
 
-if (v == 100)
-A=imread('100.jpg'); 
-
-note=imresize(note,[size(A,1) size(A,2)] );
+note=imresize(note,[size(A,1) size(A,2)] ); %Resize the image
 
 a = rgb2gray(A);
 
@@ -126,12 +123,11 @@ a = rgb2gray(A);
 
 
 
-
-a2_str = imcrop(a,[1000 30 300 80]);   % lion
+a2 = imcrop(a,[1000 30 300 80]);   % lion
 p = imcrop(note,[1000 30 300 80]);   
 %figure,imshow(p2_str);
 
-p2_str = rgb2gray(p);
+p2 = rgb2gray(p);
 
 %decompose into hsv
 
@@ -139,95 +135,50 @@ hsvA = rgb2hsv(A);
 hsvp = rgb2hsv(note);
 
 
-%figure('Name','real image hsv');
-%imshow([hsvImageReal(:,:,1) hsvImageReal(:,:,2) hsvImageReal(:,:,3)]);
-%title('Real');
-%figure('Name','fake image hsv');
-%imshow([hsvImageFake(:,:,1) hsvImageFake(:,:,2) hsvImageFake(:,:,3)]);
-%title('Fake');
-
 crophsvA = imcrop(hsvA,[1000 30 300 80]);%crop A
 crophsvp = imcrop(hsvp,[1000 30 300 80]);%crop p
 
-axes(handles.axes1);
+axes(handles.axes1);            %Display the cropped image of the object
 imshow(p);
 
 satThresh = 0.3;
 valThresh = 0.9;
-BWA = (crophsvA(:,:,2) > satThresh & crophsvA(:,:,3) < valThresh);
-%figure('Name','lion');
-%subplot(1,2,1);
-%imshow(BWA);
-%title('Real');
-BWp = (crophsvp(:,:,2) > satThresh & crophsvp(:,:,3) < valThresh);
-%figure('Name','lion');
-%subplot(1,2,2);
-%imshow(BWp);
-%title('fake');
 
-%close
+BWA = (crophsvA(:,:,2) > satThresh & crophsvA(:,:,3) < valThresh);
+BWp = (crophsvp(:,:,2) > satThresh & crophsvp(:,:,3) < valThresh);
+
+
 
 se = strel('disk',1);
+
 BWAclose = imclose(BWA,se);
 BWpclose = imclose(BWp,se);
-%figure('Name','closed lion');
-%subplot(1,2,1);
-%imshow(BWAclose);
-%title('cReal');
-%subplot(1,2,2);
-%imshow(BWpclose);
-%title('cFake');
 
 BWAclose = ~BWAclose;
 BWpclose = ~BWpclose;
 
-%clean 
 areaopenA = bwareaopen(BWAclose, 15);
-
-
 areaopenp = bwareaopen(BWpclose, 15);
 
-title('Real');
+
 axes(handles.axes5);
 imshow(areaopenp);
-title('Selected');
-
-
-
-%[~,countA] = bwarea(areaopenA);
-%[~,countp] = bwarea(areaopenp);
-
-%conA = bwconncomp(areaopenA,26);
-%conp = bwconncomp(areaopenp,26);
-
 
 areaA = bwarea(areaopenA);
 areap = bwarea(areaopenp);
 
-%areaA = regionprops(conA,'basic')
-%disp(areaA);
 
-%areap = regionprops(conp,'basic')
-%disp(areap);
-
-co=corr2 (a2_str, p2_str); 
-
-%disp(['The total number of black lines for the real note is: ' num2str(countA)]);
-%disp(['The total number of black lines for the fake note is: ' num2str(countp)]);
+co=corr2 (a2, p2); 
 
 if (co>=0.5 && areaA > 0 && areap > 0.7*areaA  )
-    %disp ('correlevance of lion >0.7');
     if (areaA > 0 && areap > 0.7*areaA )
-       % disp ('currency is legitimate');
         set(handles.edit1,'String','Real');
     else
-       % disp ('currency is fake');
         set(handles.edit1,'String','Fake');
     end;
 else
-    %disp ('correlevance of lion < 0.7');
     disp ('currency is fake');
-    set(handles.edit1,'String','currency is fake');
+    set(handles.edit1,'String','Fake');
     
 end;
 end 

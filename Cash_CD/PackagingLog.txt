@@ -1,0 +1,47 @@
+ant:
+<ant>
+  <mkdir dir="D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_redistribution" />
+  <mkdir dir="D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_testing" />
+  <mkdir dir="D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_redistribution_files_only" />
+</ant>
+mcc -C -o Cash_CD -W WinMain:Cash_CD -T link:exe -d 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_testing' -v 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Main.m' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\100.jpg' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Coin.fig' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Coin.m' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\coindetect.m' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Main.fig' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Main.m' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\merkz.m' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Note.asv' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Note.fig' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Note.m' -a 'D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\notedetect.m' 
+Compiler version: 6.0 (R2015a)
+Dependency analysis by REQUIREMENTS.
+[Warning: Adding path "D:\Academic\Level 02 -Semester01\Computer Graphics and
+Image Processing CSC2143\Coin Project\Project" to Compiler path instance.] 
+Parsing file "D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Main.m"
+	(Referenced from: "Compiler Command Line").
+Deleting 24 temporary MEX authorization files.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283426996_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_028347832_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283431941_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283410789_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283418497_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283416745_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283418666_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283420776_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283413595_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283418541_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283429024_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283411393_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283432036_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283422869_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_028347653_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283414976_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_028341212_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283426892_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283418821_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283415507_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283412266_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_028344750_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_028343610_10292.auth'.
+Removing: 'C:\Users\DELL\AppData\Local\Temp\mathworks_tmp_0283425786_10292.auth'.
+Generating file "D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_testing\readme.txt".
+Packaging...
+Adding custom icon C:\Program Files\MATLAB\MATLAB Production Server\R2015a\toolbox\compiler\Resources\default_icon.ico to D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_testing\Cash_CD.exe.
+Attempting to embed the CTF archive into the application D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_testing\Cash_CD.exe.
+Finished embedding CTF archive. Deleting the external CTF archive.
+Creating the bundle...
+Web based installer created at D:\Academic\Level 02 -Semester01\Computer Graphics and Image Processing CSC2143\Coin Project\Project\Cash_CD\for_redistribution\MyAppInstaller_web.exe.
+Packaging complete.
+Elapsed packaging time was: 2 minutes and 54 seconds.

@@ -61,30 +61,17 @@ guidata(hObject, handles);
 [imname,impath]=uigetfile({'*.jpg;*.png;*.jpeg'});
 I=imread([impath,'/',imname]);
 
-flg=ndims(I);             %imgenin renk uzayý test ediliyor. ( Testing the color space)
+I1=rgb2gray(I);
 
-if flg==3
-    I=rgb2gray(I);
-end
-
-[h,w]=size(I);
-
-c = edge(I, 'canny',0.3);  % mcanny kenar algýlama fonksiyonu (Mcanny edge detection)
-                             % ikili imge olarak kenar tespiti (binary edges)
+c = edge(I1, 'canny',0.3);  % Marks the edges of the coin
 
 se = strel('disk',2);      %
-I2 = imdilate(c,se);       % pupil bölgesinin tespiti aþamasý 
-                %
+I2 = imdilate(c,se);       % Coomplete the circumference of the circle
 
-d2 = imfill(I2, 'holes');  % pupil bölgesi alan tespiti
-        %
-
-Label=bwlabel(d2,4);
-
-a1=(Label==1);
+d2 = imfill(I2, 'holes');  % Fill the inner space of the circumference scaned
 
 
-D1 = bwdist(~a1);           % computing minimal euclidean distance to non-white pixel       % 
+D1 = bwdist(~d2);           % get the distance 
 [xc1 yc1 r1]=merkz(D1);
 f1=coindetect(r1);
 
@@ -95,10 +82,6 @@ axes(handles.axes2);
 imshow(d2);           %Show how we detect value
 
 set(handles.edit1,'String',f1); %display coin value
-
-
-% UIWAIT makes Coin wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
